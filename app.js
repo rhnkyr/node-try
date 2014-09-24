@@ -8,6 +8,7 @@ var express = require('express');
 var winston = require('winston');
 //file path işlemleri için
 var path = require('path');
+//favicon
 var favicon = require('serve-favicon');
 //sessino için
 var cookieParser = require('cookie-parser');
@@ -15,20 +16,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //session
 var session = require('express-session');
+//redis
+var redis = require('redis');
+var rds = redis.createClient();
 //sıkıştırma
 var compression = require('compression');
 //cros site json data çekmek için
 var cors = require('cors');
-
-//mongo db ayarları
-require(__dirname + '/db/mongo.js');
+//mailer
+//https://github.com/andris9/Nodemailer
+var mailer = require('nodemailer');
+//amazon ses
+var amazonSes = require('nodemailer-ses-transport');
 
 //app global
 global.app = express();
 
-//route lar
-var routes = require(__dirname + '/routes/index');
-var users = require(__dirname + '/routes/users');
+//app path
+global.appRoot = path.resolve(__dirname);
+
+//mongo db ayarları
+require(appRoot + '/db/mongo.js');
+
+//redis check
+rds.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 // Set View Engine
 app.engine('hjs', require('hogan-express'));
@@ -37,12 +50,12 @@ app.set('view options', {layout : true});
 // Set the layout page. Layout page needs {{{ yield }}}  where page content will be injected
 app.set('layout', 'layouts/main_layout');
 //app.enable('view cache');
-app.set('views', __dirname + '/views');
+app.set('views', appRoot + '/views');
 app.set('view engine', 'hjs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 
-winston.handleExceptions(new winston.transports.File({ filename : __dirname + '/logs/error.log' }))
+winston.handleExceptions(new winston.transports.File({ filename : appRoot + '/logs/error.log' }))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false }));
@@ -55,7 +68,11 @@ app.use(session({  secret : '2Smy9fMSx8i0ygm3P7fXxkTpXyf5e5P3',
 app.use(cors());
 app.use(busboy());
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(appRoot, 'public')));
+
+//route lar
+var routes = require(appRoot + '/routes/index');
+var users = require(appRoot + '/routes/users');
 
 app.use('/', routes);
 app.use('/users', users);

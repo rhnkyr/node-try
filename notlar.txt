@@ -1,0 +1,6 @@
+https://github.com/mranney/node_redis
+redisin daha iyi çalışması için
+
+npm install hiredis redis
+
+-----------------------------------

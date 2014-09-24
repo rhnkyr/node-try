@@ -10,17 +10,20 @@ var router = express.Router({strict : true});
 //http://scotch.io/tutorials/javascript/learn-to-use-the-new-router-in-expressjs-4
 // route middleware that will happen on every request
 /*router.use(function (req, res, next) {
+    // log each request to the console
+    console.log(req.method, req.url);
 
- // log each request to the console
- console.log(req.method, req.url);
-
- // continue doing what we were doing and go to the route
- next();
- });*/
+    // continue doing what we were doing and go to the route
+    next();
+});*/
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('index', { title : 'Express : Hello' });
+    res.render('index', { title : 'Express : Hello',
+        partials                : {//partial include
+            part : 'partials/part'
+        }
+    });
 });
 
 router.get('/hello/:name', function (req, res) {
@@ -41,7 +44,7 @@ router.post('/fileupload', function (req, res) {
         //get extension
         ext = path.extname(filename);
         newFile = uuid.v4() + ext;
-        fstream = fs.createWriteStream('./uploaded/' + newFile);
+        fstream = fs.createWriteStream(appRoot + '/uploaded/' + newFile);
         file.pipe(fstream);
         fstream.on('close', function () {
             res.redirect('back');
