@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-controller="MainController as mc">
+<h1 ng-bind="mc.userName"></h1>
+
+<h2 ng-bind="mc.userSurname"></h2>
+<button ng-click="mc.getUser()">Get User</button>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
