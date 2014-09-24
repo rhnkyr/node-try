@@ -20,7 +20,7 @@ var cors = require('cors');
 //mongo db ayarları
 require(__dirname + '/db/mongo.js');
 
-//app
+//app global
 global.app = express();
 
 //route lar
