@@ -6,14 +6,17 @@ var busboy = require('connect-busboy');
 var express = require('express');
 //logging
 var morgan = require('morgan');
+//file path işlemleri için
 var path = require('path');
 var favicon = require('serve-favicon');
+//sessino için
 var cookieParser = require('cookie-parser');
+//form data okuma
 var bodyParser = require('body-parser');
 //session
 var session = require('express-session');
 //sıkıştırma
-var compress = require('compression');
+var compression  = require('compression');
 //cros site json data çekmek için
 var cors = require('cors');
 
@@ -24,13 +27,13 @@ require(__dirname + '/db/mongo.js');
 global.app = express();
 
 //route lar
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routes = require(__dirname + '/routes/index');
+var users = require(__dirname + '/routes/users');
 
 // Set View Engine
 app.engine('hjs', require('hogan-express'));
 // By default, Express will use a generic HTML wrapper (a layout) to render all your pages. If you don't need that, turn it off.
-app.set('view options', {layout: true});
+app.set('view options', {layout : true});
 // Set the layout page. Layout page needs {{{ yield }}}  where page content will be injected
 app.set('layout', 'layouts/main_layout');
 //app.enable('view cache');
@@ -45,9 +48,14 @@ app.use(morgan('combined', {stream : accessLogStream}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(cookieParser());
-app.use(session({ secret : '2Smy9fMSx8i0ygm3P7fXxkTpXyf5e5P3', saveUninitialized : true, resave : true, cookie : { maxAge : 60000, secure : true }}));
+app.use(session({  secret : '2Smy9fMSx8i0ygm3P7fXxkTpXyf5e5P3',
+    saveUninitialized     : true,
+    resave                : true,
+    cookie                : { maxAge : 60000  }
+}));
 app.use(cors());
 app.use(busboy());
+app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
