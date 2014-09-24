@@ -1,6 +1,9 @@
 //file system
 var fs = require('fs');
 var express = require('express');
+var uuid = require('node-uuid');
+//extension almak için kullandık
+var path = require('path');
 //strict : true /foo == /foo/
 var router = express.Router({strict : true});
 
@@ -32,11 +35,13 @@ router.post('/deneme', function (req, res) {
 
 //file upload
 router.post('/fileupload', function (req, res) {
-    var fstream;
+    var fstream, newFile, ext;
     req.pipe(req.busboy);
     req.busboy.on('file', function (fieldname, file, filename) {
-        console.log("Uploading: " + filename);
-        fstream = fs.createWriteStream('./uploaded/' + filename);
+        //get extension
+        ext = path.extname(filename);
+        newFile = uuid.v4() + ext;
+        fstream = fs.createWriteStream('./uploaded/' + newFile);
         file.pipe(fstream);
         fstream.on('close', function () {
             res.redirect('back');
