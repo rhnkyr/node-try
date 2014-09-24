@@ -7,7 +7,7 @@ mongoose.connect(config.MONGO_URI);
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {
-    console.log('Mongoose default connection open to ' + config.MONGO_URI);
+    console.log('Mongoose default connection opened');
 });
 
 // If the connection throws an error
