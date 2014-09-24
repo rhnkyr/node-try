@@ -25,25 +25,24 @@ router.get('/hello/:name', function (req, res) {
 });
 
 router.post('/deneme', function (req, res) {
-    var name = req.body.name,
+    var name = req.body.name,//post data alma
         color = req.body.color;
     res.send(name + " " + color);
 });
 
 //file upload
-/*router.post('/fileupload', function (req, res) {
- var fstream;
- req.pipe(req.busboy);
- req.busboy.on('file', function (fieldname, file, filename) {
- console.log("Uploading: " + filename);
- fstream = fs.createWriteStream('./uploaded/' + filename);
- file.pipe(fstream);
- fstream.on('close', function () {
- res.redirect('back');
- });
- });
- });*/
-
+router.post('/fileupload', function (req, res) {
+    var fstream;
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+        console.log("Uploading: " + filename);
+        fstream = fs.createWriteStream('./uploaded/' + filename);
+        file.pipe(fstream);
+        fstream.on('close', function () {
+            res.redirect('back');
+        });
+    });
+});
 
 //route gruplama
 router.route('/login')
