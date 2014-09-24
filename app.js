@@ -42,7 +42,7 @@ app.set('view engine', 'hjs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 // create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(__dirname + '/logs/access.log', {flags : 'a'});
+var accessLogStream = fs.createWriteStream(__dirname + '/logs/error.log', {flags : 'a'});
 // setup the logger
 app.use(morgan('combined', {stream : accessLogStream}));
 app.use(bodyParser.json());
