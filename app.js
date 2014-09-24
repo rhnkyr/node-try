@@ -5,7 +5,9 @@ var busboy = require('connect-busboy');
 //express
 var express = require('express');
 //logging
-var morgan = require('morgan');
+var winston = require('winston');
+var expressWinston = require('express-winston');
+//var morgan = require('morgan');
 //file path işlemleri için
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -16,7 +18,7 @@ var bodyParser = require('body-parser');
 //session
 var session = require('express-session');
 //sıkıştırma
-var compression  = require('compression');
+var compression = require('compression');
 //cros site json data çekmek için
 var cors = require('cors');
 
@@ -42,9 +44,19 @@ app.set('view engine', 'hjs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 // create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(__dirname + '/logs/error.log', {flags : 'a'});
+var errorLog = fs.createWriteStream(__dirname + '/logs/error.log', {flags : 'a'});
 // setup the logger
-app.use(morgan('combined', {stream : accessLogStream}));
+//app.use(morgan('combined', {stream : errorLog}));
+app.use(expressWinston.errorLogger({
+    transports   : [
+        new winston.transports.Console({
+            json     : true,
+            colorize : true
+        }),
+        new (winston.transports.File)({ filename : errorLog })
+    ],
+    statusLevels : true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false }));
 app.use(cookieParser());
