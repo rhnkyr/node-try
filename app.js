@@ -25,8 +25,8 @@ var express = require('express')
     //mailer
     //https://github.com/andris9/Nodemailer
     , mailer = require('nodemailer')
-//amazon ses
-amazonSes = require('nodemailer-ses-transport');
+    //amazon ses
+    , amazonSes = require('nodemailer-ses-transport');
 
 //app global
 global.app = express();
