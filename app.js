@@ -1,33 +1,32 @@
-//file system
-var fs = require('fs');
-//file upload için middleware
-var busboy = require('connect-busboy');
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
 //express
-var express = require('express');
-//logging
-var winston = require('winston');
-//file path işlemleri için
-var path = require('path');
-//favicon
-var favicon = require('serve-favicon');
-//sessino için
-var cookieParser = require('cookie-parser');
-//form data okuma
-var bodyParser = require('body-parser');
-//session
-var session = require('express-session');
-//redis
-var redis = require('redis');
-var rds = redis.createClient();
-//sıkıştırma
-var compression = require('compression');
-//cros site json data çekmek için
-var cors = require('cors');
-//mailer
-//https://github.com/andris9/Nodemailer
-var mailer = require('nodemailer');
+var express = require('express')
+    //file upload için middleware
+    , busboy = require('connect-busboy')
+    //logging
+    , winston = require('winston')
+    //file path işlemleri için
+    , path = require('path')
+    //favicon
+    , favicon = require('serve-favicon')
+    //sessino için
+    , cookieParser = require('cookie-parser')
+    //form data okuma
+    , bodyParser = require('body-parser')
+    //session
+    , session = require('express-session')
+    //redis
+    , redis = require('redis')
+    , rds = redis.createClient()
+    //sıkıştırma
+    , compression = require('compression')
+    //cros site json data çekmek için
+    , cors = require('cors')
+    //mailer
+    //https://github.com/andris9/Nodemailer
+    , mailer = require('nodemailer')
 //amazon ses
-var amazonSes = require('nodemailer-ses-transport');
+amazonSes = require('nodemailer-ses-transport');
 
 //app global
 global.app = express();
@@ -50,10 +49,10 @@ app.set('view options', {layout : true});
 // Set the layout page. Layout page needs {{{ yield }}}  where page content will be injected
 app.set('layout', 'layouts/main_layout');
 //app.enable('view cache');
-app.set('views', appRoot + '/views');
+app.set('views', appRoot + '/public');
 app.set('view engine', 'hjs');
 // uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(appRoot + '/public/favicon.ico'));
 
 winston.handleExceptions(new winston.transports.File({ filename : appRoot + '/logs/error.log' }))
 
@@ -71,8 +70,8 @@ app.use(compression());
 app.use(express.static(path.join(appRoot, 'public')));
 
 //route lar
-var routes = require(appRoot + '/routes/index');
-var users = require(appRoot + '/routes/users');
+var routes = require(appRoot + '/routes/index')
+    , users = require(appRoot + '/routes/users');
 
 app.use('/', routes);
 app.use('/users', users);
